@@ -28,7 +28,7 @@ const Map = () => {
     try {
       for (let index = 0; index < allCities.length; index++) {
         let city = allCities[index];
-        const url = `http://api.weatherapi.com/v1/current.json?key=${weatherKey}&q=${city.name}&aqi=no`;
+        const url = `https://api.weatherapi.com/v1/current.json?key=${weatherKey}&q=${city.name}&aqi=no`;
         const weatherData = await axios.get(url);
         let weatherForLocation = weatherData.data.current.condition.text;
         if (
