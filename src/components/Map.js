@@ -6,6 +6,7 @@ import axios from "axios";
 
 const Map = () => {
   const [loading, setLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     getWeather();
@@ -47,8 +48,10 @@ const Map = () => {
 
         await getPokemonWithWeather(city);
       }
+      setIsError(false);
       setLoading(false);
     } catch (error) {
+      setIsError(true);
       console.log(error);
     }
   };
@@ -75,8 +78,10 @@ const Map = () => {
         console.log("undefined!");
       }
     } catch (error) {
+      setIsError(true);
       console.log(error);
     }
+    setIsError(false);
   };
 
   const reloadWeather = () => {
@@ -175,6 +180,7 @@ const Map = () => {
         </section>
         <section className="map">
           <h2>Map of the UK and Ireland</h2>
+          {isError ? <p>There was an error. Please try again</p> : null}
           <MapContainer
             center={[53.48, -2.23]}
             zoom={5.5}
@@ -207,7 +213,12 @@ const Map = () => {
       </>
     );
   } else {
-    return <p className="status-message">Loading...</p>;
+    return (
+      <>
+        <p className="status-message">Loading...</p>
+        {isError ? <p>There was an error. Please try again</p> : null}
+      </>
+    );
   }
 };
 
