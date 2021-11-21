@@ -21,6 +21,7 @@ const Map = () => {
     fog: "litwick",
     clear: "clefairy",
     mist: "mimikyu-disguised",
+    thunder: "zapdos",
   };
 
   const weatherKey = process.env.REACT_APP_WEATHER_API_KEY;
@@ -31,10 +32,12 @@ const Map = () => {
         let city = allCities[index];
         const url = `https://api.weatherapi.com/v1/current.json?key=${weatherKey}&q=${city.name}&aqi=no`;
         const weatherData = await axios.get(url);
-        let weatherForLocation = weatherData.data.current.condition.text;
+
+        let weatherForLocation =
+          weatherData.data.current.condition.text.toLowerCase();
         if (
           weatherForLocation.includes("cloudy") ||
-          weatherForLocation.includes("Overcast")
+          weatherForLocation.includes("overcast")
         ) {
           weatherForLocation = "cloudy";
         } else if (
@@ -42,9 +45,16 @@ const Map = () => {
           weatherForLocation.includes("drizzle")
         ) {
           weatherForLocation = "rainy";
+        } else if (
+          weatherForLocation.includes("thundery") ||
+          weatherForLocation.includes("thunder")
+        ) {
+          weatherForLocation = "thunder";
         }
+
         city.weather = weatherForLocation.toLowerCase();
-        city.ally = city.name + city.weather;
+
+        city.ally = city.name + "" + city.weather;
 
         await getPokemonWithWeather(city);
       }
@@ -52,13 +62,12 @@ const Map = () => {
       setLoading(false);
     } catch (error) {
       setIsError(true);
-      console.log(error);
     }
   };
 
   const LeafIcon = L.Icon.extend({
     options: {
-      iconSize: [70, 60],
+      iconSize: [60, 60],
     },
   });
 
@@ -74,12 +83,9 @@ const Map = () => {
         city.icon = new LeafIcon({
           iconUrl: city.sprite,
         });
-      } else {
-        console.log("undefined!");
       }
     } catch (error) {
       setIsError(true);
-      console.log(error);
     }
     setIsError(false);
   };
@@ -174,6 +180,15 @@ const Map = () => {
                   />
                 </td>
                 <td>Mist</td>
+              </tr>
+              <tr>
+                <td>
+                  <img
+                    src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/145.png"
+                    alt="zapdos"
+                  />
+                </td>
+                <td>Thunder</td>
               </tr>
             </tbody>
           </table>
