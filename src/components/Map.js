@@ -35,6 +35,7 @@ const Map = () => {
 
         let weatherForLocation =
           weatherData.data.current.condition.text.toLowerCase();
+
         if (
           weatherForLocation.includes("cloudy") ||
           weatherForLocation.includes("overcast")
@@ -50,6 +51,10 @@ const Map = () => {
           weatherForLocation.includes("thunder")
         ) {
           weatherForLocation = "thunder";
+        } else if (weatherForLocation.includes("fog")) {
+          weatherForLocation = "fog";
+        } else if (weatherForLocation.includes("snow")) {
+          weatherForLocation = "snow";
         }
 
         city.weather = weatherForLocation.toLowerCase();
